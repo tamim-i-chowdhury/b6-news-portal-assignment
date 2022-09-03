@@ -13,25 +13,25 @@ const displayNewsCategory = (newsCategories) => {
     const categoryHolder = document.createElement("span");
     categoryHolder.classList.add("category");
     categoryHolder.innerHTML = `
-        <span class="text-secondary" href="#" onclick="loadNews('${newsCategory.category_id}')">${newsCategory.category_name}</span>
+        <span class="text-secondary" href="#" onclick="loadNews('${newsCategory.category_id}', '${newsCategory.category_name}')">${newsCategory.category_name}</span>
     `;
     newsCategoryDiv.appendChild(categoryHolder);
   });
 };
-const loadNews = async (newsId) => {
+const loadNews = async (newsId, categoryName) => {
   // start the spinner
   toggleSpinner(true);
   const url = `https://openapi.programming-hero.com/api/news/category/${newsId}`;
   try {
     const res = await fetch(url);
     const data = await res.json();
-    displayNews(data.data);
+    displayNews(data.data, categoryName);
   } catch (error) {
     console.log(error);
   }
 };
 
-const displayNews = (newsData) => {
+const displayNews = (newsData, categoryName) => {
   const newsContainer = document.getElementById("news-conatiner");
   newsContainer.textContent = "";
 
@@ -42,11 +42,16 @@ const displayNews = (newsData) => {
   } else {
     noNewsMessage.classList.add("d-none");
   }
+
+  // total news for each catagory
+  const totalNewsOfEachCategory = document.getElementById("total-news");
+  totalNewsOfEachCategory.innerText = `${newsData.length} items found for category ${categoryName}`;
   newsData.forEach((data) => {
     const newsDiv = document.createElement("div");
     newsDiv.classList.add("row");
     newsDiv.classList.add("mb-4");
-    newsDiv.classList.add("h-50");
+    newsDiv.classList.add("h-50", "bg-white");
+
     newsDiv.innerHTML = `
         <div class="col-md-3">
             <img src="${
