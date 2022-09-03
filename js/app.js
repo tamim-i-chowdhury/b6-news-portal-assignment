@@ -59,9 +59,15 @@ const displayNews = (newsData) => {
                 <p class="card-text mt-4">
                 ${data.details.slice(0, 350)}
                 </p>
-                <h5 class="mt-2">Written By: ${data.author.name}</h5>
-                <h6>Total Views: ${data.total_view}</h6>
-                <button class="btn btn-primary" type="submit">Show Details</button>
+                <h5 class="mt-2">Written By: ${
+                  data.author.name ? data.author.name : "Name is not found"
+                }</h5>
+                <h6>Total Views: ${
+                  data.total_view ? data.total_view : "Data is not available"
+                }</h6>
+                <button class="btn btn-primary" type="submit" data-bs-toggle="modal" data-bs-target="#newsDetailModal" onclick="loadShowNewsDetail('${
+                  data._id
+                }')">Show Details</button>
             </div>
         </div>
     `;
@@ -80,4 +86,36 @@ const toggleSpinner = (isLoading) => {
   }
 };
 
+const loadShowNewsDetail = async (id) => {
+  try {
+    const url = `https://openapi.programming-hero.com/api/news/${id}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    displayNewsDetailByModal(data.data[0]);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const displayNewsDetailByModal = (modalData) => {
+  console.log(modalData);
+  const modalTitle = document.getElementById("newsDetailModalLabel");
+  modalTitle.innerText = `${
+    modalData.title ? modalData.title : "No title found."
+  }`;
+  const newsDetail = document.getElementById("news-detail");
+  newsDetail.innerText = `${
+    modalData.details
+      ? modalData.details.slice(0, 200)
+      : "No details information found."
+  }`;
+  const authorName = document.getElementById("author-name");
+  authorName.innerText = `Written By - ${
+    modalData.author.name ? modalData.author.name : "Not found."
+  }`;
+  const totalViews = document.getElementById("total-views");
+  totalViews.innerText = `Total Views - ${
+    modalData.total_view ? modalData.total_view : "Data is not found."
+  }`;
+};
 loadNewsCategories();
