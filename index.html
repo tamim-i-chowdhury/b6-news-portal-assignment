@@ -16,6 +16,11 @@
       integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
       crossorigin="anonymous"
     />
+    <style>
+      .category-hover:hover {
+        background-color: aquamarine;
+      }
+    </style>
   </head>
   <body class="bg-light">
     <!-- header started from here -->
@@ -107,15 +112,19 @@
         aria-labelledby="newsDetailModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-scrollable">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="newsDetailModalLabel"></h5>
             </div>
             <div class="modal-body">
-              <p id="news-detail"></p>
-              <h6 id="author-name"></h6>
-              <h6 id="total-views"></h6>
+              <div id="img-container"></div>
+              <div>
+                <p id="news-detail" class="pt-4 text-muted"></p>
+                <h6 id="author-name"></h6>
+                <h6 id="total-views"></h6>
+                <p id="rating"></p>
+              </div>
             </div>
             <div class="modal-footer">
               <button

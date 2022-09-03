@@ -11,7 +11,7 @@ const displayNewsCategory = (newsCategories) => {
   newsCategories.forEach((newsCategory) => {
     // console.log(newsCategory.category_name);
     const categoryHolder = document.createElement("span");
-    // categoryHolder.classList.add("list-inline-item", "text-decoration-none");
+    categoryHolder.classList.add("category-hover");
     categoryHolder.innerHTML = `
         <span class="badge text-bg-light fs-4" onclick="loadNews('${newsCategory.category_id}', '${newsCategory.category_name}')">${newsCategory.category_name}</span>
     `;
@@ -73,6 +73,9 @@ const displayNews = (newsData, categoryName) => {
                     : "Description not found"
                 }
                 </p>
+                <img style="height: 50px;" class="img-fluid rounded-circle ms-2" src="${
+                  data.author.img
+                }"></img>
                 <h5 class="mt-2">Written By: ${
                   data.author.name ? data.author.name : "Name is not found"
                 }</h5>
@@ -87,7 +90,7 @@ const displayNews = (newsData, categoryName) => {
     `;
     newsContainer.appendChild(newsDiv);
   });
-  // stop the spinner
+  //stop the spinner
   toggleSpinner(false);
 };
 
@@ -113,7 +116,7 @@ const loadShowNewsDetail = async (id) => {
 };
 
 const displayNewsDetailByModal = (modalData) => {
-  //   console.log(modalData);
+  console.log(modalData);
   const modalTitle = document.getElementById("newsDetailModalLabel");
   modalTitle.innerText = `${
     modalData.title ? modalData.title : "No title found."
@@ -121,17 +124,28 @@ const displayNewsDetailByModal = (modalData) => {
   const newsDetail = document.getElementById("news-detail");
   newsDetail.innerText = `${
     modalData.details
-      ? modalData.details.slice(0, 200)
+      ? modalData.details.slice(0, 150) + "..."
       : "No details information found."
   }`;
   const authorName = document.getElementById("author-name");
-  authorName.innerText = `Written By - ${
-    modalData.author.name ? modalData.author.name : "Not found."
-  }`;
+  authorName.innerText = `
+  Written By - ${modalData.author.name ? modalData.author.name : "Not found."}`;
   const totalViews = document.getElementById("total-views");
   totalViews.innerText = `Total Views - ${
     modalData.total_view ? modalData.total_view : "Data is not found."
   }`;
+
+  const rating = document.getElementById("rating");
+  rating.innerHTML = `
+    <span class="me-2 text-success">Rating : ${modalData.rating.number}</span>
+    <span class="text-success">Performance : ${modalData.rating.badge}</span>
+  `;
+  const imgContainer = document.getElementById("img-container");
+  imgContainer.innerHTML = `
+    <img class="img-fluid w-100 h-50" src="${
+      modalData.image_url ? modalData.image_url : "Image is not found."
+    }"></img>
+  `;
 };
 loadNewsCategories();
 // default loading of news function call...
