@@ -6,19 +6,20 @@ const loadNewsCategories = () => {
 };
 
 const displayNewsCategory = (newsCategories) => {
-  //   console.log(newsCatagory);
+  //   console.log(newsCategories);
   const newsCategoryDiv = document.getElementById("news-category-container");
   newsCategories.forEach((newsCategory) => {
     // console.log(newsCategory.category_name);
     const categoryHolder = document.createElement("span");
-    categoryHolder.classList.add("category");
+    // categoryHolder.classList.add("list-inline-item", "text-decoration-none");
     categoryHolder.innerHTML = `
-        <span class="text-secondary" href="#" onclick="loadNews('${newsCategory.category_id}', '${newsCategory.category_name}')">${newsCategory.category_name}</span>
+        <span class="badge text-bg-light fs-4" onclick="loadNews('${newsCategory.category_id}', '${newsCategory.category_name}')">${newsCategory.category_name}</span>
     `;
     newsCategoryDiv.appendChild(categoryHolder);
   });
 };
 const loadNews = async (newsId, categoryName) => {
+  console.log(newsId, categoryName);
   // start the spinner
   toggleSpinner(true);
   const url = `https://openapi.programming-hero.com/api/news/category/${newsId}`;
@@ -42,6 +43,8 @@ const displayNews = (newsData, categoryName) => {
   } else {
     noNewsMessage.classList.add("d-none");
   }
+  // sorting the array of element
+  newsData.sort((a, b) => b.total_view - a.total_view);
 
   // total news for each catagory
   const totalNewsOfEachCategory = document.getElementById("total-news");
@@ -60,9 +63,15 @@ const displayNews = (newsData, categoryName) => {
         </div>
         <div class="col-md-9">
             <div class="card-body py-5">
-                <h3 class="card-title">${data.title}</h3>
+                <h3 class="card-title">${
+                  data.title ? data.title : "Title not found"
+                }</h3>
                 <p class="card-text mt-4">
-                ${data.details.slice(0, 350)}
+                ${
+                  data.details.slice(0, 350)
+                    ? data.details.slice(0, 300) + "..."
+                    : "Description not found"
+                }
                 </p>
                 <h5 class="mt-2">Written By: ${
                   data.author.name ? data.author.name : "Name is not found"
@@ -82,6 +91,7 @@ const displayNews = (newsData, categoryName) => {
   toggleSpinner(false);
 };
 
+// display new by default
 const toggleSpinner = (isLoading) => {
   const spinnerSection = document.getElementById("spinner-section");
   if (isLoading) {
@@ -103,7 +113,7 @@ const loadShowNewsDetail = async (id) => {
 };
 
 const displayNewsDetailByModal = (modalData) => {
-  console.log(modalData);
+  //   console.log(modalData);
   const modalTitle = document.getElementById("newsDetailModalLabel");
   modalTitle.innerText = `${
     modalData.title ? modalData.title : "No title found."
@@ -124,3 +134,5 @@ const displayNewsDetailByModal = (modalData) => {
   }`;
 };
 loadNewsCategories();
+// default loading of news function call...
+loadNews("05", "Entertainment");
