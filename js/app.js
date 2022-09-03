@@ -19,6 +19,8 @@ const displayNewsCategory = (newsCategories) => {
   });
 };
 const loadNews = async (newsId) => {
+  // start the spinner
+  toggleSpinner(true);
   const url = `https://openapi.programming-hero.com/api/news/category/${newsId}`;
   try {
     const res = await fetch(url);
@@ -65,5 +67,17 @@ const displayNews = (newsData) => {
     `;
     newsContainer.appendChild(newsDiv);
   });
+  // stop the spinner
+  toggleSpinner(false);
 };
+
+const toggleSpinner = (isLoading) => {
+  const spinnerSection = document.getElementById("spinner-section");
+  if (isLoading) {
+    spinnerSection.classList.remove("d-none");
+  } else {
+    spinnerSection.classList.add("d-none");
+  }
+};
+
 loadNewsCategories();
